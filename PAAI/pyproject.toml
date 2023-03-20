@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "paai"
+version = "0.1.2"
+description = ""
+authors = ["Pouria Faraji <pouria.faraji@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.94.1"
+uvicorn = "^0.21.1"
+loguru = "^0.6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

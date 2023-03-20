@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paai-deployment
+spec:
+  selector:
+    matchLabels:
+      app: paai
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: paai
+    spec:
+      containers:
+      - name: paai
+        image: paai:0.1.2
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000

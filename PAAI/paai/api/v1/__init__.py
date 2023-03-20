@@ -1,0 +1,1 @@
+from .device_api import api_router as device_api_router
