@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     networks:
-      - default
+      # - default
       - confluent_default
       - mongo_default
     ports:
@@ -29,7 +29,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     networks:
-      - default
+      # - default
       - confluent_default
       - mongo_default
     ports:
@@ -42,7 +42,7 @@ services:
         condition: on-failure
 
 networks:
-  default:
+  # default:
   confluent_default: 
     external: true
   mongo_default:

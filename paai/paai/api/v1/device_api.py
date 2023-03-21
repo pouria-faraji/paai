@@ -27,7 +27,7 @@ async def message_from_device(iot_device: IoTDevice, request: Request) -> Respon
     logger.debug(f"{type(processed_message)}: {processed_message}")
 
     try:
-        await request.app.state.producer.produce(os.environ.get('PROCESSED_MESSAGES_TOPIC', 'processed_messages'), processed_message.json())
+        await request.app.state.producer.produce(os.environ.get('PROCESSED_MESSAGES_TOPIC', 'processed_messages'), processed_message.json(exclude_none=True))
     except KafkaException as ex:
         logger.error(ex)
     # logger.debug(f"{type(iot_device.dict())}: {iot_device.dict()}")
