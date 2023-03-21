@@ -22,12 +22,9 @@ WORKDIR /usr/src/app
 
 COPY pyproject.toml .
 COPY poetry.lock .
-RUN poetry install
 
 COPY paai ./paai
 COPY tests ./tests
-
-
-
+RUN poetry install
 
 CMD ["poetry", "run", "python", "paai/main.py"]

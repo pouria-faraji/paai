@@ -2,6 +2,7 @@ import subprocess
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from generator.api.v1 import generator_api_router
@@ -13,6 +14,20 @@ app_version = subprocess.check_output(['poetry', 'version']).decode('utf-8').spl
 app = FastAPI(title=settings.project_name, openapi_url=f"{api_prefix}/openapi.json", version=app_version)
 
 app.include_router(generator_api_router, prefix=api_prefix)
+
+origins = [
+    "http://localhost",
+    "http://localhost:7000",
+    "http://localhost:8000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup_event() -> None:

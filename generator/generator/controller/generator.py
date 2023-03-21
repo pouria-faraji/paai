@@ -13,10 +13,12 @@ class Generator(object):
 
     busy: bool = False
     number_of_devices: int = 0
+    frequency = 1 # Sending data every {frequency} seconds
     device_types = ['Thermostat', 'Barometer', 'Hygrometer', 'HeartRateMeter']
 
     paai_endpoint = os.getenv("PAAI_ENDPOINT", "http://localhost:8000")
     iot_device_endpoint = paai_endpoint + '/api/v1/device'
+
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
@@ -27,6 +29,7 @@ class Generator(object):
     #     return random.choice(self.device_types)
 
     def start(self, number_of_devices):
+
         random.seed(50)
         self.busy = True
         self.number_of_devices = number_of_devices
@@ -55,10 +58,12 @@ class Generator(object):
                 elif device == "HeartRateMeter":
                     heart_rate = round(random.uniform(60.0, 100.0), 2)
                     data = {'device_id': str(i), 'tag': device, 'timestamp': int(datetime.now().timestamp()), 'heart_rate': heart_rate}
+
+                logger.debug(f"ENDPOINT: {self.iot_device_endpoint}")
                 response = requests.post(self.iot_device_endpoint, json=data)
                 if response.status_code == 200:
                     logger.debug(f"sent data: {data}")
-            time.sleep(1)
+            time.sleep(self.frequency)
 
     def stop(self):
         self.busy = False
