@@ -1,0 +1,36 @@
+--- 
+version: '3'
+services:
+
+  mongo:
+    image: mongo:6.0.5
+    container_name: mongo
+    restart: always
+    networks:
+      - default
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminPasswd!23
+      MONGO_INITDB_DATABASE: paai
+    volumes:
+      - mongo1-data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    deploy:
+      replicas: 1
+
+volumes:
+  mongo1-data:
+networks:
+  default:
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
