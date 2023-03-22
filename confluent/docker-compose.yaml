@@ -27,6 +27,7 @@ services:
         echo "Waiting for zookeeper to be ready"
         until cub zk-ready zookeeper:2181 20 &> /dev/null; do echo "Zookeper not ready. Try again.."; sleep 5; done
         echo "Zookeper ready"
+        
         /etc/confluent/docker/run
     ports:
       - "9092:9092"
@@ -34,6 +35,7 @@ services:
     networks:
       - mongo_default
       - default
+    
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -136,6 +138,40 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+
+  kafka-operator:
+    image: confluentinc/cp-server:7.3.2
+    container_name: kafka-operator
+    command:
+      - /bin/bash
+      - -c
+      - |
+        echo "Waiting for kafka to be ready"
+        until cub kafka-ready 1 10 -b broker:29092 &> /dev/null; do echo "Kafka not ready. Try again.."; sleep 5; done
+        echo "Kafka ready"
+        echo "Creating topics..."
+        kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic processed_messages --partitions 3
+        echo "Waiting for connect to be ready"
+        until cub connect-ready connect 8083 10 &> /dev/null; do echo "Connect not ready. Try again.."; sleep 5; done
+        echo "Connect ready"
+        echo "Downloading connect-cli tool"
+        wget https://github.com/lensesio/kafka-connect-tools/releases/download/v1.0.6/connect-cli
+        chmod +x connect-cli
+        echo "Installing mongo_sink connector"
+        pwd
+        ./connect-cli create mongodb_sink_processed_messages -e http://connect:8083 < /mongodb_sink.properties
+        echo "Done"
+    networks:
+      - mongo_default
+      - default
+    depends_on:
+      - broker
+    volumes:
+      - ./mongodb_sink.properties:/mongodb_sink.properties
+    restart: "no"
+    deploy:
+      restart_policy:
+        condition: none
 
 networks:
   default:

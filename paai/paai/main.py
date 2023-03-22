@@ -43,7 +43,6 @@ async def startup_event() -> None:
 
     kafka_controller = KafkaController(kafka_producer_settings)
     kafka_controller.create_topic(os.environ.get('PROCESSED_MESSAGES_TOPIC', 'processed_messages'))
-
     app.state.producer = AIOProducer(kafka_producer_settings)
 
 @app.on_event("shutdown")

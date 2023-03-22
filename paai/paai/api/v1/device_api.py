@@ -22,7 +22,7 @@ async def root():
 @api_router.post("/device")
 async def message_from_device(iot_device: IoTDevice, request: Request) -> Response:
 
-    logger.debug(f"{type(iot_device)}: {iot_device}")
+    # logger.debug(f"{type(iot_device)}: {iot_device}")
     processed_message = MessageController.process_raw_message(iot_device)
     logger.debug(f"{type(processed_message)}: {processed_message}")
 
