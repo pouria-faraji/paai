@@ -35,6 +35,11 @@ services:
     networks:
       - mongo_default
       - default
+
+    deploy:
+      resources:
+        limits:
+          memory: 3gb
     
     environment:
       KAFKA_BROKER_ID: 1
