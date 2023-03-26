@@ -2,7 +2,10 @@ version: '2'
 
 services:
   spark-master:
-    image: bitnami/spark:3.3
+    # image: bitnami/spark:3.3
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -17,8 +20,13 @@ services:
     networks:
       - mongo_default
       - default
+    healthcheck:
+      test: ["CMD", "curl", "-f",  "http://localhost:8080"]
+      interval: 20s
+      timeout: 20s
+      retries: 5
+      start_period: 10s
 
-    # command: spark-submit /pyspark_job.py
   spark-worker:
     image: bitnami/spark:3.3
     networks:
@@ -33,12 +41,18 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+    depends_on:
+      spark-master:
+        condition: service_healthy
 
   spark-job:
     image: bitnami/spark:3.3
     networks:
       - mongo_default
       - default
+    depends_on:
+      spark-master:
+        condition: service_healthy
     volumes:
       - ./pyspark_job.py:/pyspark_job.py
     command: spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2,org.mongodb.spark:mongo-spark-connector_2.12:10.1.1 --master spark://spark-master:7077 /pyspark_job.py 

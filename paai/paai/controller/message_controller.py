@@ -10,7 +10,7 @@ class MessageController:
         device_message = DeviceMessage(**{
             'timestamp': raw_message.timestamp,
             'device_id': raw_message.device_id,
-            'measurement': MessageController.get_measurement(raw_message),
+            # 'measurement': MessageController.get_measurement(raw_message),
             'sensor': MessageController.get_sensor(raw_message),
             'value': MessageController.get_value(raw_message)
         })

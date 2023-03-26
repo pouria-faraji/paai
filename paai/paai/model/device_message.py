@@ -16,7 +16,7 @@ class DeviceMessage(BaseModel):
     
     timestamp: datetime
     device_id: str
-    measurement: Measurement
+    # measurement: Measurement
 
     sensor: Sensor
     value: float
