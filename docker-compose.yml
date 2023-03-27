@@ -1,5 +1,13 @@
 --- 
 version: '3'
+
+networks:
+  # default:
+  confluent_default: 
+    external: true
+  mongo_default:
+    external: true
+
 services:
   generator:
     image: generator:0.1.0
@@ -41,9 +49,3 @@ services:
       restart_policy:
         condition: on-failure
 
-networks:
-  # default:
-  confluent_default: 
-    external: true
-  mongo_default:
-    external: true

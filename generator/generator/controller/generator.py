@@ -15,6 +15,7 @@ class Generator(object):
     number_of_devices: int = 0
     frequency = 1 # Sending data every {frequency} seconds
     device_types = ['Thermostat', 'Barometer', 'Hygrometer', 'HeartRateMeter']
+    generated_devices = {}
 
     paai_endpoint = os.getenv("PAAI_ENDPOINT", "http://localhost:8000")
     iot_device_endpoint = paai_endpoint + '/api/v1/device'
@@ -59,6 +60,8 @@ class Generator(object):
                     heart_rate = round(random.uniform(60.0, 100.0), 2)
                     data = {'device_id': str(i), 'tag': device, 'timestamp': int(datetime.now().timestamp()), 'heart_rate': heart_rate}
 
+                self.generated_devices[str(i)] = device
+
                 logger.debug(f"ENDPOINT: {self.iot_device_endpoint}")
                 response = requests.post(self.iot_device_endpoint, json=data)
                 if response.status_code == 200:
@@ -75,9 +78,22 @@ class Generator(object):
         return self.busy
 
     def getStatus(self) -> str:
+        # if self.busy:
+        #     return f"Generator is busy sending data of {self.number_of_devices} devices."
+        # else:
+        #     return "Generator is stopped."
+
         if self.busy:
-            return f"Generator is busy sending data of {self.number_of_devices} devices."
+            result = {
+                'status': 'running',
+                'numDevices': self.number_of_devices,
+                'devices': [{'device_id': key, 'tag':value} for key, value in self.generated_devices.items()]
+            }
+            return result
         else:
-            return "Generator is stopped."
+            result = {
+                'status': 'stopped'
+            }
+            return result
 
 generator = Generator()

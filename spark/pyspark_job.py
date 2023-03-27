@@ -4,15 +4,16 @@ from pyspark.sql.types import (DoubleType, StringType, StructField, StructType,
                                TimestampType)
 
 WINDOW_DURATION = '10 seconds'
+DELAY_DURATION = '2 seconds'
 
 # Kafka settings
-KAFKA_BOOTSTRAP_URL = "65.108.162.34:9392"
-KAFKA_TOPIC = "spark_test"
+# KAFKA_BOOTSTRAP_URL = "65.108.162.34:9392"
+KAFKA_BOOTSTRAP_URL = "broker:29092"
+KAFKA_TOPIC = "processed_messages"
 
 # MongoDB settings
 MONGODB_CONNECTION_URL = 'mongodb://paaiAdmin:paaiAdminPasswd%2123@mongo:27017/paai?authSource=paai&readPreference=primary'
 MONGODB_DATABASE = 'paai'
-# MONGODB_COLLECTION = 'processed_messages'
 MONGODB_COLLECTION = 'aggregated_messages'
 
 
@@ -44,7 +45,7 @@ kafka_df = spark \
 
 
 aggregated_df = kafka_df \
-                .withWatermark("timestamp", WINDOW_DURATION) \
+                .withWatermark("timestamp", DELAY_DURATION) \
                 .groupBy(window("timestamp", windowDuration=WINDOW_DURATION,slideDuration=WINDOW_DURATION), "device_id") \
                 .agg(avg("value").alias("avg"), max("value").alias("max"), min("value").alias("min"))
                 # .avg("value")

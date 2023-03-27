@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Response, status
 from generator.controller.generator import Generator, generator
 from loguru import logger
+from json import dumps
 
 api_router = APIRouter(tags=["Generator"])
 
@@ -17,7 +18,6 @@ async def start_generator(numDevices: int = 3) -> Response:
 
     generator.thread = generator.start(int(numDevices))
 
-    # generator.start(numDevices)
     return Response(f"Generator has started with {numDevices} devices.", status_code=status.HTTP_200_OK, headers={'Content-Type': 'text/plain'})
 
 @api_router.post("/stop")
@@ -30,7 +30,7 @@ async def stop_generator() -> Response:
 @api_router.get("/status")
 async def get_status() -> Response:
     logger.info("Getting generator status")
-    return Response(generator.getStatus(), status_code=status.HTTP_200_OK, headers={'Content-Type': 'text/plain'})
+    return Response(dumps(generator.getStatus()), status_code=status.HTTP_200_OK, headers={'Content-Type': 'application/json'})
 
 
 

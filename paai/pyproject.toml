@@ -10,6 +10,7 @@ fastapi = "^0.94.1"
 uvicorn = "^0.21.1"
 loguru = "^0.6.0"
 confluent-kafka = "^2.0.2"
+motor = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

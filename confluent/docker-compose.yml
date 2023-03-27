@@ -1,5 +1,11 @@
 ---
 version: '3'
+
+networks:
+  default:
+  mongo_default:
+    external: true
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
@@ -13,6 +19,10 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   broker:
     image: confluentinc/cp-server:7.3.2
@@ -37,6 +47,9 @@ services:
       - default
 
     deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
       resources:
         limits:
           memory: 3gb
@@ -109,6 +122,11 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
 
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.3.2
     hostname: control-center
@@ -144,6 +162,11 @@ services:
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
 
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: on-failure
+
   kafka-operator:
     image: confluentinc/cp-server:7.3.2
     container_name: kafka-operator
@@ -178,7 +201,3 @@ services:
       restart_policy:
         condition: none
 
-networks:
-  default:
-  mongo_default:
-    external: true
