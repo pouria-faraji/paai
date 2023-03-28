@@ -11,19 +11,20 @@ from typing_extensions import Annotated
 
 api_router = APIRouter(tags=["Device"])
 
+# Making a unified datamodel to be used as the API request body
 IoTDevice = Annotated[Union[Barometer, HeartRateMeter, Hygrometer, Thermostat], Field(discriminator='tag')]
 
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/device")
+# This is the POST endpoint for receiving IoT devices data
+@api_router.post("/device",
+                 summary="Parse IoT Device Messages",
+                 description="Parse, validate , and transform raw messages from IoT devices")
 async def message_from_device(iot_device: IoTDevice, request: Request) -> Response:
-
+    """Parse, validate , and transform messages from IoT devices
+    """
+    # Processing raw messages from IoT devices
     processed_message = MessageController.process_raw_message(iot_device)
-    logger.debug(f"{type(processed_message)}: {processed_message}")
-
     try:
+        # Producing to the processed_messages topic in Kafka
         await request.app.state.producer.produce(os.environ.get('PROCESSED_MESSAGES_TOPIC', 'processed_messages'), processed_message.json(exclude_none=True))
     except KafkaException as ex:
         logger.error(ex)

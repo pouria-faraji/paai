@@ -15,22 +15,22 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: adminPasswd!23
       MONGO_INITDB_DATABASE: paai
     volumes:
-      - mongo1-data:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro # For creating a user for paai database
     deploy:
       replicas: 1
 
+  mongo-express: # Service for viewing MongoDB in the browser
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: adminPasswd!23
+      ME_CONFIG_MONGODB_URL: mongodb://admin:adminPasswd!23@mongo:27017/
+
 volumes:
-  mongo1-data:
+  data:
 networks:
   default:
-
-  # mongo-express:
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - 8081:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
-  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/

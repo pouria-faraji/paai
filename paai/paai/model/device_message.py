@@ -13,11 +13,10 @@ class Sensor(Enum):
     no_sensor = 'no_sensor'
 
 class DeviceMessage(BaseModel):
-    
+    """DeviceMessage datamodel used for transmitting data to Kafka
+    """
     timestamp: datetime
     device_id: str
-    # measurement: Measurement
-
     sensor: Sensor
     value: float
 

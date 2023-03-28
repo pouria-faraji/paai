@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 
 
 class QueryRequest(BaseModel):
+    """QueryRequest DataModel used for the body of the request in queries API endpoints
+    """
 
     since: datetime = Field(default=None, 
                             alias='from', 
@@ -19,15 +21,13 @@ class QueryRequest(BaseModel):
                                   description="List of device_ids to get aggregation data")
 
 class QueryResponse(BaseModel):
+    """QueryResponse DataModel used for the body of the response in queries API endpoints
+    """
     class AggregationResponse(BaseModel):
         device_id: str
         average: Optional[float] = None
         maximum: Optional[float] = None
         minimum: Optional[float] = None
-
-        # def __init__(__pydantic_self__, aggregation_type) -> None:
-        #     super().__init__(aggregation_type)
-        #     __pydantic_self__.value = Field(default=None, alias=aggregation_type)
     
     since: datetime = Field(default=None,
                             alias='from',

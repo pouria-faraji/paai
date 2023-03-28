@@ -7,6 +7,8 @@ from confluent_kafka import KafkaException
 
 
 class AIOProducer:
+    """Asynchronous Kafka Producer
+    """
     def __init__(self, configs, loop=None):
         self._loop = loop or asyncio.get_event_loop()
         self._producer = confluent_kafka.Producer(configs)

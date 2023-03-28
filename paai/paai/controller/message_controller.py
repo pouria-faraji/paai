@@ -1,16 +1,19 @@
 from paai.model.device import Device
 from paai.model.device_message import DeviceMessage, Sensor
-from paai.model.measurement import Measurement
-
 
 class MessageController:
+    """ A class having methods required for processing raw messages coming from devices.
+    """
+
+    # Transforming raw device messages into DeviceMessage datamodel
     @staticmethod
     def process_raw_message(raw_message: Device) -> DeviceMessage:
+        """Transforms raw messages into DeviceMessage datamodel.
+        """
 
         device_message = DeviceMessage(**{
             'timestamp': raw_message.timestamp,
             'device_id': raw_message.device_id,
-            # 'measurement': MessageController.get_measurement(raw_message),
             'sensor': MessageController.get_sensor(raw_message),
             'value': MessageController.get_value(raw_message)
         })
@@ -18,22 +21,9 @@ class MessageController:
         return device_message
 
     @staticmethod
-    def get_measurement(raw_message: Device) -> Measurement:
-
-        measurement = Measurement()
-        if hasattr(raw_message, 'temperature'):
-            measurement.temperature = raw_message.temperature
-        elif hasattr(raw_message, 'humidity'):
-            measurement.humidity = raw_message.humidity
-        elif hasattr(raw_message, 'pressure'):
-            measurement.pressure = raw_message.pressure
-        elif hasattr(raw_message, 'heart_rate'):
-            measurement.heart_rate = raw_message.heart_rate
-
-        return measurement
-
-    @staticmethod
     def get_sensor(raw_message: Device) -> str:
+        """Getting sensor based on the attribute of the raw message
+        """
 
         if hasattr(raw_message, 'temperature'):
             return Sensor.temperature.value
@@ -48,6 +38,8 @@ class MessageController:
 
     @staticmethod
     def get_value(raw_message: Device) -> float:
+        """Getting value of the sensor based on the attribute
+        """
         if hasattr(raw_message, 'temperature'):
             return raw_message.temperature
         elif hasattr(raw_message, 'humidity'):

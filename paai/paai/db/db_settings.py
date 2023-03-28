@@ -15,6 +15,7 @@ class DBSettings():
     host     = os.environ.get('MONGODB_HOST', 'mongo:27017')
 
     def __init__(self) -> None:
+        # Creating the connection URI to the MongoDB based on the attributes
         self.connection_uri = f"mongodb://{self.username}:{self.password}@{self.host}/{self.database}?authSource={self.database}&readPreference=primary&directConnection=true&ssl=false"
 
 async def __get_database(request: Request) -> AsyncIOMotorDatabase:

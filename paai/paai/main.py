@@ -21,6 +21,7 @@ app = FastAPI(title=settings.project_name, openapi_url=f"{api_prefix}/openapi.js
 app.include_router(device_api_router, prefix=api_prefix)
 app.include_router(query_api_router, prefix=api_prefix)
 
+# Adding to CORS Middleware to allow connection from these URLs
 origins = [
     "http://localhost",
     "http://localhost:7000",
@@ -35,6 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Creating Kafka settings for the producer
 kafka_producer_settings = {"bootstrap.servers": os.environ.get('BOOTSTRAP_SERVERS', 'localhost:9092')}
 
 @app.on_event("startup")
@@ -43,14 +45,18 @@ async def startup_event() -> None:
     """
     logger.info(f"Kafka bootstrap server is {kafka_producer_settings['bootstrap.servers']}")
 
+    # Creating MongoDB Client from DBSettings
     db_settings = DBSettings()
     logger.debug(f"Connection url: {db_settings.connection_uri}")
     app.state.db_client = motor.motor_asyncio.AsyncIOMotorClient(db_settings.connection_uri,
                                                     connect=True,
                                                     tz_aware=True)  # connect now and detect connection issues
 
+    # Creating necessary Kafka topics if needed
     kafka_controller = KafkaController(kafka_producer_settings)
     kafka_controller.create_topic(os.environ.get('PROCESSED_MESSAGES_TOPIC', 'processed_messages'))
+
+    # Creating Asynchronous Kafka Producer
     app.state.producer = AIOProducer(kafka_producer_settings)
 
     logger.info('PAAI Ready.')

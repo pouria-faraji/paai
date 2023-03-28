@@ -2,14 +2,13 @@
 version: '3'
 
 networks:
-  # default:
   confluent_default: 
     external: true
   mongo_default:
     external: true
 
 services:
-  generator:
+  generator: # service for generating fake IoT device data
     image: generator:0.1.0
     container_name: generator
     build:
@@ -17,7 +16,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     networks:
-      # - default
       - confluent_default
       - mongo_default
     ports:
@@ -37,7 +35,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     networks:
-      # - default
       - confluent_default
       - mongo_default
     ports:
@@ -45,7 +42,7 @@ services:
     env_file:
       - ./paai/.env
     deploy:
-      replicas: 1
+      replicas: 3 # Making it more scalable 
       restart_policy:
         condition: on-failure
 

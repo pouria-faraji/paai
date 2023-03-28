@@ -4,7 +4,7 @@ class Settings(BaseSettings):
     """
     General settings for the generator application
     """
-    project_name: str = "IoT Device Messaege Generator"
+    project_name: str = "IoT Device Message Generator"
     api_version: int = 1
     host: str = "0.0.0.0"
     port: int = 7000

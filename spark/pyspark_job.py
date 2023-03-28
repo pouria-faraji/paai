@@ -7,7 +7,6 @@ WINDOW_DURATION = '10 seconds'
 DELAY_DURATION = '2 seconds'
 
 # Kafka settings
-# KAFKA_BOOTSTRAP_URL = "65.108.162.34:9392"
 KAFKA_BOOTSTRAP_URL = "broker:29092"
 KAFKA_TOPIC = "processed_messages"
 

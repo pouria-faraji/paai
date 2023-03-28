@@ -4,7 +4,7 @@ from confluent_kafka.admin import AdminClient, NewTopic
 
 class KafkaController:
     """
-    Class for methods related to kafka operations
+    Class for methods related to kafka operations, such as creating a new topic
     """
     def __init__(self, configs) -> None:
         self._admin_client = AdminClient(configs)

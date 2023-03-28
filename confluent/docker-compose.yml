@@ -163,11 +163,11 @@ services:
       PORT: 9021
 
     deploy:
-      replicas: 0
+      replicas: 0 # It is zero because of memory limitations in my local system
       restart_policy:
         condition: on-failure
 
-  kafka-operator:
+  kafka-operator: # Service for creating requiered topics and installing mongo-kafka-connector
     image: confluentinc/cp-server:7.3.2
     container_name: kafka-operator
     command:
@@ -197,7 +197,7 @@ services:
     volumes:
       - ./mongodb_sink.properties:/mongodb_sink.properties
     restart: "no"
-    deploy:
+    deploy: # It will exit after finishing its job
       restart_policy:
         condition: none
 

@@ -15,6 +15,7 @@ app = FastAPI(title=settings.project_name, openapi_url=f"{api_prefix}/openapi.js
 
 app.include_router(generator_api_router, prefix=api_prefix)
 
+# Adding to CORS Middleware to allow connection from these URLs
 origins = [
     "http://localhost",
     "http://localhost:7000",
