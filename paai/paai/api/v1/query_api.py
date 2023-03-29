@@ -11,7 +11,7 @@ api_router = APIRouter(tags=["Queries"])
                  response_model_exclude_none=True, 
                  summary="Calculating Average", 
                  description="Calculating the average value for a set of devices in a time frame. from and to fields are optional.")
-async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
+async def calculate_avg(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
     """Calculating the average value for a set of devices in a time frame. from and to fields are optional.
     """
     try:
@@ -23,7 +23,8 @@ async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency
 
         # Getting average for all devices in the request
         for device_id in query_request.device_ids:
-            result = await QueryDataBaseService.get_average_by_device_id(db, device_id, query_request.since, query_request.to)
+            # result = await QueryDataBaseService.get_average_by_device_id(db, device_id, query_request.since, query_request.to)
+            result = await QueryDataBaseService.get_aggregation_by_device_id(db, device_id, query_request.since, query_request.to, 'avg')
             for item in result:
                 query_response.data.append(QueryResponse.AggregationResponse(**{'device_id': device_id, 'average': item['totalAverage']}))
 
@@ -37,7 +38,7 @@ async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency
                  response_model_exclude_none=True, 
                  summary="Calculating Maximum", 
                  description="Calculating the maximum value for a set of devices in a time frame. from and to fields are optional.")
-async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
+async def calculate_max(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
     """Calculating the maximum value for a set of devices in a time frame. from and to fields are optional.
     """
     try:
@@ -49,7 +50,8 @@ async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency
 
         # Getting maximum for all devices in the request
         for device_id in query_request.device_ids:
-            result = await QueryDataBaseService.get_maximum_by_device_id(db, device_id, query_request.since, query_request.to)
+            # result = await QueryDataBaseService.get_maximum_by_device_id(db, device_id, query_request.since, query_request.to)
+            result = await QueryDataBaseService.get_aggregation_by_device_id(db, device_id, query_request.since, query_request.to, 'max')
             for item in result:
                 query_response.data.append(QueryResponse.AggregationResponse(**{'device_id': device_id, 'maximum': item['totalMaximum']}))
 
@@ -63,7 +65,7 @@ async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency
                  response_model_exclude_none=True,
                  summary="Calculating Minimum", 
                  description="Calculating the minimum value for a set of devices in a time frame. from and to fields are optional.")
-async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
+async def calculate_min(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency) -> QueryResponse:
     """Calculating the minimum value for a set of devices in a time frame. from and to fields are optional.
     """
     try:
@@ -75,7 +77,8 @@ async def root(query_request: QueryRequest, db:AsyncIOMotorDatabase=DBDependency
 
         # Getting minimum for all devices in the request
         for device_id in query_request.device_ids:
-            result = await QueryDataBaseService.get_minimum_by_device_id(db, device_id, query_request.since, query_request.to)
+            # result = await QueryDataBaseService.get_minimum_by_device_id(db, device_id, query_request.since, query_request.to)
+            result = await QueryDataBaseService.get_aggregation_by_device_id(db, device_id, query_request.since, query_request.to, 'min')
             for item in result:
                 query_response.data.append(QueryResponse.AggregationResponse(**{'device_id': device_id, 'minimum': item['totalMinimum']}))
 
