@@ -90,6 +90,18 @@ In order to install and run the application, [Docker](https://www.docker.com/get
 ```
 docker swarm init
 ```
+Also make sure that the following port numbers are open and free:
+- 8000 - Main web service
+- 7000 - Generator web service
+- 2181 - Confluent Zookeeper
+- 9092 - Confluent Broker
+- 9101 - Confluent Broker
+- 8083 - Confluent Connect
+- 9021 - Confluent Control Center
+- 8080 - Spark Master
+- 7077 - Spark Master
+- 8081 - MongoDB Express
+- 27017 - MongoDB
 
 ### Building
 To build the application, all docker images must be pulled and built. You can use the following command to automatically pull and build all docker images:
@@ -102,6 +114,7 @@ To run the application, all docker services must be deployed to the Docker Swarm
 ```
 make run
 ```
+After finishing the run command, you can access
 
 ### Uninstalling
 To remove all services from the swarm run the following command:
