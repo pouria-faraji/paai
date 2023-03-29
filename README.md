@@ -86,7 +86,25 @@ Moreover, To enhance data availability, it is recommended to leverage multiple i
 
 ## Installing and Running
 ### Prerequisites
+In order to install and run the application, [Docker](https://www.docker.com/get-started/) must be already installed. Also it should be in swarm mode using the following command:
+```
+docker swarm init
+```
 
 ### Building
+To build the application, all docker images must be pulled and built. You can use the following command to automatically pull and build all docker images:
+```
+make build
+```
 
 ### Running
+To run the application, all docker services must be deployed to the Docker Swarm. You can use the following command to automatically deploy all services:
+```
+make run
+```
+
+### Uninstalling
+To remove all services from the swarm run the following command:
+```
+make clean
+```

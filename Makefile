@@ -21,14 +21,17 @@ run:
 	echo "Running MogoDB"
 	docker stack deploy -c ./mongo/docker-compose.yml mongo
 	sleep 10
-	echo "Running MogoDB"
+	echo "Running Confluent Kafka"
 	docker stack deploy -c ./confluent/docker-compose.yml confluent
 	sleep 10
+	echo "Running Spark Master"
 	docker stack deploy -c ./spark/docker-compose.yml spark
 	sleep 5
+	echo "Running Spark Worker"
 	# docker service update spark_spark-worker --force
 	docker service scale spark_spark-worker=1
 	sleep 5
+	echo "Running Spark Job Service"
 	# docker service update spark_spark-job --force
 	docker service scale spark_spark-job=1
 
@@ -39,7 +42,9 @@ run:
 	echo "Running Generator and main app APIs"
 	docker stack deploy -c docker-compose.yml app
 
+	echo "All services are deployed to the Docker Swarm. You can open the following URLs."
 	echo "IoT Device Data Generator: http://127.0.0.1:7000/docs"
 	echo "Main App Queries API Endpoint: http://127.0.0.1:8000/docs"
 	echo "MongoDB Express: http://127.0.0.1:8081"
 	echo "Spark Master UI: http://127.0.0.1:8080"
+	echo "Kafka Control Center: http://127.0.0.1:9021"
