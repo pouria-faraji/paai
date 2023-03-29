@@ -141,3 +141,10 @@ We can have another containerized service to be the host of our trained model de
 
 ### Real-time Prediction
 To achieve real-time predictive capabilities while data is in motion, we can employ a Spark job that reads streaming data from a Kafka topic, performs transformations, rescaling, and cleaning, and then makes predictions on each record. Alternatively, we can use Spark's batch processing to predict each batch of data using our trained model. Finally, we can route the predicted data to either another Kafka topic for further processing or store the results in a MongoDB collection.
+
+### Data
+Regarding the data itself, there are a few factors that we should take into account:
+1. In order to predict with a high accuracy, our model should be trained on data which are very similar to real-world data, with similar diversity, completeness, and distribution.
+2. If we want our model to perform well on unseen data, it should be generalized well by exploiting different techniques which are frequently used for avoiding overfitting, such as cross-validation, regularization, and training with more data.
+3. Preprocessing the data is also important. We need to handle transformation, normalization, missing values, outliers and removing noise in our data pipeline.
+4. Data can contain sensitive information about users or devices, so it is important to protect data from unauthorized access by using encryption, and access control. 
