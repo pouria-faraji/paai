@@ -51,6 +51,8 @@ There is an API endpoint which receives data from the *generator*, validates it 
 
 After transforming, they are produced directly to a Kafka topic called `processed_messages`
 
+Also, in order to increase scalability, multiple replicas of this service should be deployed, so that the service and the *swarm's load balancing* can manage heavy loading of the incoming data more efficiently. In the current implementation, 3 replicas of the service are deployed.
+
 ### MongoDB
 MongoDB is the main database for the application to store device messages and also aggregated messages.
 
@@ -114,10 +116,28 @@ To run the application, all docker services must be deployed to the Docker Swarm
 ```
 make run
 ```
-After finishing the run command, you can access
+After finishing the run command, you can access different services web UI page in the following URLs:
+- **IoT Device Data Generator:** [http://127.0.0.1:7000/docs](http://127.0.0.1:7000/docs)
+- **Main App Queries API Endpoint:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- **MongoDB Express:** [http://127.0.0.1:8081](http://127.0.0.1:8081)
+- **Spark Master UI:** [http://127.0.0.1:8080](http://127.0.0.1:8080)
+- **Kafka Control Center:** [http://127.0.0.1:9021](http://127.0.0.1:9021)
 
 ### Uninstalling
 To remove all services from the swarm run the following command:
 ```
 make clean
 ```
+
+## Adding Prediction Model
+To build a pipeline for running prediction models, we can extend our implementation with the following components and data flow:
+### Model Training
+First we need to build and train our predicition model on the historical data using machine learning frameworks such as [TensorFlow](https://www.tensorflow.org/overview), [scikit-learn](https://scikit-learn.org/stable/), or [Spark's MLlib](https://spark.apache.org/mllib/).
+
+We can use the historical data stored in the MongoDB as our model's training and validation data sets.
+
+### Model Deployment
+We can have another containerized service to be the host of our trained model deployed in the docker swarm. Then we can have an API endpoint (for instance using [FastAPI](https://fastapi.tiangolo.com/)) inside the service to serve our trained model.
+
+### Real-time Prediction
+To achieve real-time predictive capabilities while data is in motion, we can employ a Spark job that reads streaming data from a Kafka topic, performs transformations, rescaling, and cleaning, and then makes predictions on each record. Alternatively, we can use Spark's batch processing to predict each batch of data using our trained model. Finally, we can route the predicted data to either another Kafka topic for further processing or store the results in a MongoDB collection.
