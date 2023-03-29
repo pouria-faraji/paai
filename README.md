@@ -2,7 +2,7 @@
 This repository contains the source code for an application which generates and sends fake IoT device data to a web service. Also, aggregation queries such as average, maximum and minimum for a specific timeframe can be executed in the web service.
 
 ## Architecture
-The web service is designed and developed using microservices architecture. There are five main services:
+The web service is designed and developed using microservices architecture, and the container orchestration is done by [Docker Swarm](https://docs.docker.com/engine/swarm/). There are five main services:
 
 1. Generator
 2. Paai (Abbreviation of *Programming Assignment AI*)
@@ -73,11 +73,19 @@ There are multiple services for the Kafka as the following:
 ### Spark
 This service is responsible for processing on real-time streaming data and executing different operations such as aggregation to calculate average, maximum and minimum of data for a specific time window.
 
-There is a *spark job* defined to connect to the Kafka topic and receive the streaming data from Kafka. Aggregate and calculate average, maximum and minimum for a time window of 10 seconds, which can be changed in the `pyspark_job.py` file. Then the data is directed to a collection in MongoDB.
+There is a *spark job* defined to connect to the Kafka topic and receive the streaming data from Kafka. Aggregate and calculate average, maximum and minimum for a time window of 10 seconds (which can be changed in the [pyspark_job.py](./spark/pyspark_job.py) file). Then the data is directed to a collection in MongoDB.
 
 ## Limitations
+The current implementation has a few limitations primarily due  to the limited resources available, such as memory in the development environment.
+
+The application is intended for stand-alone use on a single machine, which is why only one broker replica is deployed in the Kafka service. While in a production environment with greater computing resources and multiple machines, it is recommended to deploy multiple replicas of the broker for optimal performance.
+
+Due to the same resource limitations, Spark currently operates with only one worker node. However, in a multi-machine environment with greater computing resources, deploying multiple worker nodes can significantly enhance performance.
+
+Moreover, To enhance data availability, it is recommended to leverage multiple instances of MongoDB nodes using replica sets.
+
 ## Installing and Running
-### Prerequisite
+### Prerequisites
 
 ### Building
 

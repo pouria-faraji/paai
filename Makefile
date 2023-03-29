@@ -43,5 +43,3 @@ run:
 	echo "Main App Queries API Endpoint: http://127.0.0.1:8000/docs"
 	echo "MongoDB Express: http://127.0.0.1:8081"
 	echo "Spark Master UI: http://127.0.0.1:8080"
-	
-

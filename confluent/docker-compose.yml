@@ -163,7 +163,7 @@ services:
       PORT: 9021
 
     deploy:
-      replicas: 0 # It is zero because of memory limitations in my local system
+      replicas: 1
       restart_policy:
         condition: on-failure
 
