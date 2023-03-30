@@ -25,7 +25,7 @@ run:
 	docker stack deploy -c ./confluent/docker-compose.yml confluent
 	sleep 10
 	until curl --connect-timeout 5 --silent 127.0.0.1:8083; do echo "Confluent Connect takes a few minutes to start. Please wait..."; sleep 20; done
-	echo "Running Spark Master"
+	echo "\nRunning Spark Master"
 	docker stack deploy -c ./spark/docker-compose.yml spark
 	sleep 5
 	echo "Running Spark Worker"
@@ -49,7 +49,7 @@ run:
 	$(eval search_text := "PAAI")
 	until curl --silent $(url) | grep -q $(search_text); do echo "Starting Up. Please wait..."; sleep 10; done
 
-	echo "All services are deployed to the Docker Swarm. You can open the following URLs."
+	echo "\nAll services are deployed to the Docker Swarm. You can open the following URLs.\n"
 	echo "IoT Device Data Generator: http://127.0.0.1:7000/docs"
 	echo "Main App Queries API Endpoint: http://127.0.0.1:8000/docs"
 	echo "MongoDB Express: http://127.0.0.1:8081"

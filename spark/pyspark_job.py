@@ -47,17 +47,6 @@ aggregated_df = kafka_df \
                 .withWatermark("timestamp", DELAY_DURATION) \
                 .groupBy(window("timestamp", windowDuration=WINDOW_DURATION,slideDuration=WINDOW_DURATION), "device_id") \
                 .agg(avg("value").alias("avg"), max("value").alias("max"), min("value").alias("min"))
-                # .avg("value")
-
-# Producing to topic
-# query = kafka_df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)") \
-#         .writeStream \
-#         .format("kafka") \
-#         .option("kafka.bootstrap.servers", "65.108.162.34:9392") \
-#         .option("topic", "spark_test_sink") \
-#         .option("checkpointLocation", "/tmp/checkpoints") \
-#         .start()
-
 
 # Writing to MongoDB
 aggregated_df.writeStream \
@@ -69,6 +58,5 @@ aggregated_df.writeStream \
   .option('spark.mongodb.collection', MONGODB_COLLECTION) \
   .outputMode("append") \
   .start()
-
 
 spark.streams.awaitAnyTermination()
