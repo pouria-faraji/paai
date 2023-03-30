@@ -129,6 +129,10 @@ In order to run tests, [Python](https://www.python.org/) and  [pytest](https://d
 ```
 pip install -U pytest
 ```
+Then for executing the test you can run the following command:
+```
+make test
+```
 ### Uninstalling
 To remove all services from the swarm run the following command:
 ```
