@@ -39,7 +39,7 @@ The *paai* service is responsible to receive data, parse, validate, and transfor
 
 The web framework used for building APIs in Python is [FastAPI](https://fastapi.tiangolo.com/).
 
-There is an API endpoint which receives data from the *generator*, validates it and transform it into a `DeviceMessage`, so all device types can have a same data model. A sample *DeviceMessage* is like the following:
+There is an API endpoint which receives data from the *generator*, validates it and transform it into a `DeviceMessage` class, so all device types can have a same data model. A sample *DeviceMessage* is like the following:
 ```json
 {
     "device_id": "1",
@@ -104,6 +104,11 @@ Also make sure that the following port numbers are open and free:
 - 7077 - Spark Master
 - 8081 - MongoDB Express
 - 27017 - MongoDB
+
+Also by running the following command, make sure that `make` utility is installed and available:
+```
+sudo apt-get install build-essential
+```
 
 ### Building
 To build the application, all docker images must be pulled and built. You can use the following command to automatically pull and build all docker images:
