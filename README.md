@@ -122,7 +122,13 @@ After finishing the run command, you can access different services web UI page i
 - **MongoDB Express:** [http://127.0.0.1:8081](http://127.0.0.1:8081)
 - **Spark Master UI:** [http://127.0.0.1:8080](http://127.0.0.1:8080)
 - **Kafka Control Center:** [http://127.0.0.1:9021](http://127.0.0.1:9021)
+### Testing
+For testing, only unit testing is implemented for the *paai* service to test validation of raw and processed device messages.
 
+In order to run tests, [Python](https://www.python.org/) and  [pytest](https://docs.pytest.org/en/7.1.x/getting-started.html) must be already installed. You can install the pytest framework using the following command:
+```
+pip install -U pytest
+```
 ### Uninstalling
 To remove all services from the swarm run the following command:
 ```

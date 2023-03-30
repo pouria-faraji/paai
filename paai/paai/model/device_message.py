@@ -1,7 +1,6 @@
 from datetime import datetime
 from enum import Enum, unique
 
-from paai.model.measurement import Measurement
 from pydantic import BaseModel
 
 @unique
