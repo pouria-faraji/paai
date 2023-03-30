@@ -42,7 +42,6 @@ services:
       replicas: 0 # It will be 1 during application running.
       restart_policy:
         condition: on-failure
-        delay: 10s
 
   spark-job:
     image: bitnami/spark:3.3
@@ -58,5 +57,4 @@ services:
       replicas: 0 # It will be 1 during application running.
       restart_policy:
         condition: on-failure
-        delay: 10s
 

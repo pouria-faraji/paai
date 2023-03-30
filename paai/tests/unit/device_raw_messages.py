@@ -119,7 +119,7 @@ def test_transform_Hygrometer():
     assert processed_message.sensor.value == Sensor.humidity.value
     assert processed_message.value == device_message.humidity
 
-def test_transform_Hygrometer():
+def test_transform_HeartRateMeter():
     raw_message = {
         "device_id": "444",
         "timestamp": 1680185496,
