@@ -1,4 +1,4 @@
-# Programming Assignment - AI Engineer
+# Scalable Realtime IoT Data Processing Pipeline
 This repository contains the source code for an application which generates and sends fake IoT device data to a web service. Also, aggregation queries such as average, maximum and minimum for a specific timeframe can be executed in the web service.
 
 ## Architecture
